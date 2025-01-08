@@ -1,9 +1,13 @@
 FROM node:23.4-bookworm-slim
 
 WORKDIR /app
+RUN mkdir /interface
 
-COPY package.json package-lock.json ./
+COPY /backend/package.json /backend/package-lock.json ./
 RUN npm ci
-COPY . .
+COPY /backend .
+COPY /interface /interface
+
+RUN npx tsc
 
 ENTRYPOINT ["npm", "start"]
