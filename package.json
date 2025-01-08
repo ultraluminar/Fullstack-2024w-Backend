@@ -13,5 +13,11 @@
   "bugs": {
     "url": "https://github.com/ultraluminar/Fullstack-2024w/issues"
   },
-  "homepage": "https://github.com/ultraluminar/Fullstack-2024w#readme"
+  "homepage": "https://github.com/ultraluminar/Fullstack-2024w#readme",
+  "dependencies": {
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5"
+  }
 }
