@@ -1,8 +1,10 @@
 {
   "name": "backend",
   "version": "0.0.0",
+  "description": "Fullstack project from Module FWA 2024w",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./src/server.js"
   },
   "repository": {
     "type": "git",
@@ -15,9 +17,14 @@
   },
   "homepage": "https://github.com/ultraluminar/Fullstack-2024w#readme",
   "dependencies": {
+    "express": "^4.21.1",
+    "pg": "^8.13.1",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20",
     "typescript": "^5.7.2"
   },
   "devDependencies": {
+    "@types/express": "^5.0.0",
     "@types/node": "^22.10.5"
   }
 }
