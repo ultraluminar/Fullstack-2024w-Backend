@@ -11,8 +11,8 @@ export class User extends BaseEntity {
     id: number
 
     @Column({length: 30})
-    @MinLength(3, { message: "Username is too short" })
-    @MaxLength(30, { message: "Username is too long" })
+    @MinLength(3, { message: "Benutzername ist zu kurz" })
+    @MaxLength(30, { message: "Benutzername ist zu lang" })
     username: string
 
     @Column()
