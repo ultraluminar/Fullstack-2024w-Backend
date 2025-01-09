@@ -8,5 +8,6 @@ usersRouter.post('/login', authController.login);
 usersRouter.post('/register', authController.register);
 usersRouter.delete('/:userId', usersController.deleteUser);
 usersRouter.get('/:userId', usersController.getUserById);
+usersRouter.get('/:userId/questions', usersController.getAllQuestionsFromUser);
 
 export { usersRouter };
