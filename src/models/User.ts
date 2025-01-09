@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
-import { MinLength, MaxLength, IsEmail } from "class-validator";
+import { MinLength, MaxLength, IsEmail, IsNotEmpty } from "class-validator";
 import { hash, compare } from "bcrypt";
 import jwt from 'jsonwebtoken';
 import { CreateUser } from "./CreateUser.js";
@@ -13,13 +13,16 @@ export class User extends BaseEntity {
     @Column({length: 30})
     @MinLength(3, { message: "Benutzername ist zu kurz" })
     @MaxLength(30, { message: "Benutzername ist zu lang" })
+    @IsNotEmpty({ message: "Benutzername darf nicht leer sein" })
     username: string
 
     @Column()
+    @IsNotEmpty({ message: "Passworthash darf nicht leer sein" })
     password_hash: string
 
     @Column("text")
     @IsEmail()
+    @IsNotEmpty({ message: "Email darf nicht leer sein" })
     email: string
 
     @Column()
