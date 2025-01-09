@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn } from "typeorm";
 import { MinLength, MaxLength, IsEmail, IsNotEmpty, IsDate } from "class-validator";
 import { hash, compare } from "bcrypt";
 import jwt from 'jsonwebtoken';
@@ -25,7 +25,7 @@ export class User extends BaseEntity {
     @IsNotEmpty({ message: "Email darf nicht leer sein" })
     email: string
 
-    @Column()
+    @CreateDateColumn()
     @IsDate()
     created_at: Date
 
@@ -34,7 +34,6 @@ export class User extends BaseEntity {
         user.username = createUser.username;
         user.email = createUser.email;
         user.password_hash = await hash(createUser.password, 10);
-        user.created_at = new Date();
         return user;
     }
 
