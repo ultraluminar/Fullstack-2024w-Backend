@@ -23,13 +23,12 @@ export const usersController = {
 
     async deleteUser(request: Request, response: Response) {
         let token = request.headers.authorization;
-        if (token != null && token.startsWith('Bearer ')) {
-            token = token.slice(7);
-        } else {
+        if (token == null || !token.startsWith('Bearer ')) {
             const errorResponse = ErrorResponse.invalidToken();
             response.status(401).json(errorResponse);
             return;
         }
+        token = token.slice(7);
         const tokenPayload = User.decodeToken(token);
         if (typeof tokenPayload === 'string' || tokenPayload == null) {
             const errorResponse = ErrorResponse.invalidToken();
@@ -56,5 +55,9 @@ export const usersController = {
         await user.remove();
         console.log(`User with ID "${userId}" removed`);
         response.status(204).end();
-    }
+    },
+    async getAllQuestionsFromUser(request: Request, response: Response) {
+        // TODO: implement
+        response.status(501).end();
+    },
 }
