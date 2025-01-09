@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
-import { MinLength, MaxLength, IsEmail, validate } from "class-validator";
+import { MinLength, MaxLength, IsEmail } from "class-validator";
 import { hash, compare } from "bcrypt";
 import jwt from 'jsonwebtoken';
 import { CreateUser } from "./CreateUser.js";
@@ -42,11 +42,6 @@ export class User extends BaseEntity {
             console.error(error);
             return null;
         }
-    }
-
-    async validate(): Promise<boolean> {
-        const errors = await validate(this);
-        return errors.length === 0;
     }
 
     async authenticate(password: string): Promise<boolean> {
