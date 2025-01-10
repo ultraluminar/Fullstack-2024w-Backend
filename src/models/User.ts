@@ -37,24 +37,7 @@ export class User extends BaseEntity {
         return user;
     }
 
-    static decodeToken(token: string): jwt.JwtPayload | string | null {
-        const secret = process.env.JWT_SECRET!;
-        try {
-            return jwt.verify(token, secret);
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-    }
-
     async authenticate(password: string): Promise<boolean> {
         return await compare(password, this.password_hash);
-    }
-
-    generateToken(): string {
-        const payload = {userId: this.id, username: this.username};
-        const secret = process.env.JWT_SECRET!;
-        const options = {expiresIn: '1h'};
-        return jwt.sign(payload, secret, options);
     }
 }

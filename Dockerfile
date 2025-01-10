@@ -4,7 +4,7 @@ WORKDIR /app
 RUN mkdir /interface
 
 COPY /backend/package.json /backend/package-lock.json ./
-RUN npm ci
+RUN npm ci --production
 COPY /backend .
 COPY /interface /interface
 

@@ -5,6 +5,7 @@ import { LoginUser } from '../models/LoginUser.js';
 import { CreateUser } from '../models/CreateUser.js';
 import { LoginResponse } from "../models/LoginResponse.js";
 import { ErrorResponse } from "../models/ErrorResponse.js";
+import { Token } from "../models/Token.js";
 
 function validatePassword(password: string): boolean {
     return password.length >= 8;
@@ -29,8 +30,8 @@ export const authController = {
             response.status(401).json(errorResponse);
             return;
         }
-        const token = user.generateToken();
-        const loginResponse = new LoginResponse(token);
+        const tokenString = Token.generateFromUser(user);
+        const loginResponse = new LoginResponse(tokenString);
         response.status(200).json(loginResponse);
     },
 
@@ -56,8 +57,8 @@ export const authController = {
             return;
         }
         await user.save();
-        const token = user.generateToken();
-        const loginResponse = new LoginResponse(token);
+        const tokenString = Token.generateFromUser(user);
+        const loginResponse = new LoginResponse(tokenString);
         response.status(201).json(loginResponse);
     }
 }
