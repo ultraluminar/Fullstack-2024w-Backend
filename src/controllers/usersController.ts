@@ -8,7 +8,7 @@ export const usersController = {
     async getUserById(request: Request, response: Response) {
         const userId = Number(request.params.userId);
         if (isNaN(userId)) {
-            const errorResponse = ErrorResponse.invalidId(request.params.userId);
+            const errorResponse = ErrorResponse.invalidId(userId);
             response.status(400).json(errorResponse);
             return;
         }
@@ -31,7 +31,7 @@ export const usersController = {
         }
         const userId = Number(request.params.userId);
         if (isNaN(userId)) {
-            const errorResponse = ErrorResponse.invalidId(request.params.userId);
+            const errorResponse = ErrorResponse.invalidId(userId);
             response.status(400).json(errorResponse);
             return;
         }
