@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
-import { MinLength, MaxLength, IsEmail, validate } from "class-validator";
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn } from "typeorm";
+import { MinLength, MaxLength, IsEmail, IsNotEmpty, IsDate } from "class-validator";
 import { hash, compare } from "bcrypt";
 import jwt from 'jsonwebtoken';
 import { CreateUser } from "./CreateUser.js";
@@ -11,18 +11,22 @@ export class User extends BaseEntity {
     id: number
 
     @Column({length: 30})
-    @MinLength(3, { message: "Username is too short" })
-    @MaxLength(30, { message: "Username is too long" })
+    @MinLength(3, { message: "Benutzername ist zu kurz" })
+    @MaxLength(30, { message: "Benutzername ist zu lang" })
+    @IsNotEmpty({ message: "Benutzername darf nicht leer sein" })
     username: string
 
     @Column()
+    @IsNotEmpty({ message: "Passworthash darf nicht leer sein" })
     password_hash: string
 
     @Column("text")
     @IsEmail()
+    @IsNotEmpty({ message: "Email darf nicht leer sein" })
     email: string
 
-    @Column()
+    @CreateDateColumn()
+    @IsDate()
     created_at: Date
 
     static async fromCreateUser(createUser: CreateUser): Promise<User> {
@@ -30,7 +34,6 @@ export class User extends BaseEntity {
         user.username = createUser.username;
         user.email = createUser.email;
         user.password_hash = await hash(createUser.password, 10);
-        user.created_at = new Date();
         return user;
     }
 
@@ -42,11 +45,6 @@ export class User extends BaseEntity {
             console.error(error);
             return null;
         }
-    }
-
-    async validate(): Promise<boolean> {
-        const errors = await validate(this);
-        return errors.length === 0;
     }
 
     async authenticate(password: string): Promise<boolean> {
