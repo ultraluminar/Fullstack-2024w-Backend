@@ -2,8 +2,8 @@ import { UpdateQuestion as UpdateQuestionInterface } from '../../../interface/up
 import { Request } from 'express';
 
 export class UpdateQuestion implements UpdateQuestionInterface {
-    title: string;
-    body: string;
+    title?: string;
+    body?: string;
 
     constructor(title: string, body: string) {
         this.title = title;
