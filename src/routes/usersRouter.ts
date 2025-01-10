@@ -2,12 +2,9 @@ import { Router } from 'express';
 import { authController } from '../controllers/authController.js';
 import { usersController } from '../controllers/usersController.js';
 
-const usersRouter = Router();
-
-usersRouter.post('/login', authController.login);
-usersRouter.post('/register', authController.register);
-usersRouter.delete('/:userId', usersController.deleteUser);
-usersRouter.get('/:userId', usersController.getUserById);
-usersRouter.get('/:userId/questions', usersController.getAllQuestionsFromUser);
-
-export { usersRouter };
+export const usersRouter = Router()
+    .post('/login', authController.login)
+    .post('/register', authController.register)
+    .delete('/:userId', usersController.deleteUser)
+    .get('/:userId', usersController.getUserById)
+    .get('/:userId/questions', usersController.getAllQuestionsFromUser);

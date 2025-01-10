@@ -13,7 +13,7 @@ export class ErrorResponse implements ErrorResponseInterface {
     static fromValidationErrors(errors: ValidationError[], isPasswordValid: boolean): ErrorResponse {
         const messages = errors.map(error => Object.values(error.constraints!)[0]);
         if (!isPasswordValid) {
-            messages.push("Password is too short");
+            messages.push("Passwort ist zu kurz");
         }
         return new ErrorResponse(messages.join(", "), 400);
     }

@@ -13,11 +13,7 @@ export class CreateUser implements CreateUserInterface {
     }
 
     static fromRequest(request: Request): CreateUser | null {
-        if (request.body === undefined || request.body === null) {
-            console.log("Request body is undefined or null");
-            return null;
-        }
-        if (request.body.username == null || request.body.email == null || request.body.password == null) {
+        if (request.body?.username == null || request.body?.email == null || request.body?.password == null) {
             return null;
         }
         return new CreateUser(request.body.username, request.body.email, request.body.password);
