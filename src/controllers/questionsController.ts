@@ -7,6 +7,7 @@ import { Token } from "../models/Token.js";
 import { User } from "../models/User.js";
 import { CreateQuestion } from "../models/CreateQuestion.js";
 import { QuestionArrayResponse } from "../models/QuestionArrayResponse.js";
+import { validate } from "class-validator";
 
 export const questionsController = {
     async getQuestions(request: Request, response: Response) {
@@ -43,6 +44,12 @@ export const questionsController = {
             return;
         }
         const question = Question.fromCreateQuestionAndUser(createQuestion, user);
+        const errors = await validate(question);
+        if (errors.length > 0) {
+            const errorResponse = ErrorResponse.fromValidationErrors(errors);
+            response.status(400).json(errorResponse);
+            return;
+        }
         await question.save();
         const publicQuestion = await PublicQuestion.fromQuestion(question);
         response.status(201).json(publicQuestion);
@@ -106,6 +113,12 @@ export const questionsController = {
         }
         if (updateQuestion.title !== undefined){
             question.title = updateQuestion.title;
+        }
+        const errors = await validate(question);
+        if (errors.length > 0) {
+            const errorResponse = ErrorResponse.fromValidationErrors(errors);
+            response.status(400).json(errorResponse);
+            return;
         }
         await question.save();
         const publicQuestion = await PublicQuestion.fromQuestion(question);
