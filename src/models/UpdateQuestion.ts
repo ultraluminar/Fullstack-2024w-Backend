@@ -11,7 +11,7 @@ export class UpdateQuestion implements UpdateQuestionInterface {
     }
 
     static fromRequest(request: Request): UpdateQuestion | null {
-        if (request.body?.title == null || request.body?.body == null) {
+        if (request.body?.title == null && request.body?.body == null) {
             return null;
         }
         return new UpdateQuestion(request.body.title, request.body.body);
