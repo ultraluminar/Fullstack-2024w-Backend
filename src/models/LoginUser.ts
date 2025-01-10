@@ -11,7 +11,7 @@ export class LoginUser implements LoginUserInterface {
     }
 
     static fromRequest(request: Request): LoginUser | null {
-        if (request.body.username == null || request.body.password == null) {
+        if (request.body?.username == null || request.body?.password == null) {
             return null;
         }
         return new LoginUser(request.body.username, request.body.password);
