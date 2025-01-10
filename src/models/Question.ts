@@ -1,6 +1,16 @@
 import { IsDate, IsNotEmpty, MaxLength, MinLength, validate } from "class-validator";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, FindOptionsWhere, Like, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./User.js";
+import { CreateQuestion } from "./CreateQuestion.js";
+import { Request, Response } from "express";
+
+export enum Sort {
+    newest = "newest",
+    oldest = "oldest",
+    votes = "votes",
+}
+
+const pageSize: number = 20;
 
 @Entity()
 export class Question extends BaseEntity {
@@ -29,6 +39,31 @@ export class Question extends BaseEntity {
     @UpdateDateColumn()
     @IsDate()
     updatedAt: Date
+
+    static fromCreateQuestionAndUser(createQuestion: CreateQuestion, user: User): Question{
+        const question = new Question();
+        question.title = createQuestion.title;
+        question.body = createQuestion.body;
+        question.user = user;
+        return question;
+    }
+
+    static async countFromQuery(search: string): Promise<number> {
+        return await Question.countBy({ title: Like(`%${search}%`) });
+    }
+
+    static async fromQuery(search: string, sort: Sort, page: number): Promise<Question[]>{
+        const whereOptions: FindOptionsWhere<Question> = { title: Like(`%${search}%`) };
+        const offset = (page - 1) * pageSize
+
+        return await Question
+            .createQueryBuilder()
+            .where(whereOptions)
+            .orderBy("question.createdAt", sort === Sort.newest ? "ASC" : "DESC")
+            .offset(offset)
+            .limit(pageSize)
+            .execute();
+    }
 
     async getVotes(): Promise<number>{
         // TODO: implement

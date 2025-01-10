@@ -1,16 +1,26 @@
 import { Request, Response } from "express";
 import { ErrorResponse } from "../models/ErrorResponse.js";
-import { Question } from "../models/Question.js";
+import { Question, Sort } from "../models/Question.js";
 import { PublicQuestion } from "../models/PublicQuestion.js";
 import { UpdateQuestion } from "../models/UpdateQuestion.js";
 import { Token } from "../models/Token.js";
 import { User } from "../models/User.js";
 import { CreateQuestion } from "../models/CreateQuestion.js";
+import { QuestionArrayResponse } from "../models/QuestionArrayResponse.js";
 
 export const questionsController = {
     async getQuestions(request: Request, response: Response) {
-        // TODO: implement
-        response.status(501).end();
+        const { search, sort, page } = request.params;
+        if (search == null || sort == null || page == null) {
+            const url = new URL(request.path);
+            url.searchParams.set("search", search ?? "");
+            url.searchParams.set("sort", sort ?? Sort.newest);
+            url.searchParams.set("page", page ?? "1");
+            response.redirect(url.toString());
+            return;
+        }
+        const questionArray = QuestionArrayResponse.fromSearchQuery(search, sort as Sort, Number(page));
+        response.status(200).json(questionArray);
     },
     async createQuestion(request: Request, response: Response) {
         const token = Token.fromRequest(request);
