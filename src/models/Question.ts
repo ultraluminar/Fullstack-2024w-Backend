@@ -1,5 +1,6 @@
 import { IsDate, IsNotEmpty, MaxLength, MinLength, validate } from "class-validator";
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { User } from "./User.js";
 
 @Entity()
 export class Question extends BaseEntity {
@@ -18,9 +19,8 @@ export class Question extends BaseEntity {
     @IsNotEmpty({ message: "Fragebody darf nicht leer sein" })
     body: string
 
-    @Column()
-    @IsNotEmpty({ message: "User ID darf nicht leer sein" })
-    userId: number
+    @ManyToOne(() => User, (user) => user.questions)
+    user: User
 
     @CreateDateColumn()
     @IsDate()
