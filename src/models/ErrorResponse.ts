@@ -45,4 +45,8 @@ export class ErrorResponse implements ErrorResponseInterface {
     static userNotFound(id: number): ErrorResponse {
         return new ErrorResponse(`User mit der ID "${id}" nicht gefunden!`, 404);
     }
+
+    static questionNotFound(id: number): ErrorResponse{
+        return new ErrorResponse(`Frage mit der ID "${id}" nicht gefunden!`, 404);
+    }
 }
