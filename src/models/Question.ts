@@ -30,4 +30,9 @@ export class Question extends BaseEntity {
     @IsDate()
     updatedAt: Date
 
+    async getVotes(): Promise<number>{
+        // TODO: implement
+        return 69;
+    }
+
 }

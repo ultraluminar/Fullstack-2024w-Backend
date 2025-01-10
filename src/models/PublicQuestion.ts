@@ -1,4 +1,5 @@
 import { Question as QuestionInterface } from '../../../interface/question.js';
+import { Question } from './Question.js';
 
 export class PublicQuestion implements QuestionInterface {
     id: number;
@@ -17,5 +18,17 @@ export class PublicQuestion implements QuestionInterface {
         this.votes = votes;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    static async fromQuestion(question: Question): Promise<PublicQuestion>{
+        return new PublicQuestion(
+            question.id,
+            question.title,
+            question.body,
+            question.user.id,
+            await question.getVotes(),
+            question.createdAt,
+            question.updatedAt,
+        );
     }
 }
