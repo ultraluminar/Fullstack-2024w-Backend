@@ -60,7 +60,7 @@ export const questionsController = {
             response.status(404).json(errorResponse);
             return;
         }
-        const publicQuestion = PublicQuestion.fromQuestion(question);
+        const publicQuestion = await PublicQuestion.fromQuestion(question);
         response.status(200).json(publicQuestion);
 
     },
