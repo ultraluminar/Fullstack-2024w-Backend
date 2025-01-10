@@ -38,7 +38,7 @@ export class ErrorResponse implements ErrorResponseInterface {
         return new ErrorResponse(`Nutzername "${username}" bereits vergeben`, 409);
     }
 
-    static invalidId(id: any): ErrorResponse {
+    static invalidId(id: number): ErrorResponse {
         return new ErrorResponse(`Ungültige ID "${id}"`, 400);
     }
 
