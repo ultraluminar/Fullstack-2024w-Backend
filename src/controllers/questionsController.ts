@@ -61,7 +61,10 @@ export const questionsController = {
             response.status(400).json(errorResponse);
             return;
         }
-        const question = await Question.findOneBy({id: questionId});
+        const question = await Question.findOne({
+            where: {id: questionId},
+            relations: {user: true},
+        });
         if (question == null){
             const errorResponse = ErrorResponse.questionNotFound(questionId);
             response.status(404).json(errorResponse);
@@ -90,7 +93,10 @@ export const questionsController = {
             response.status(400).json(errorResponse);
             return;
         }
-        const question = await Question.findOneBy({ id: questionId });
+        const question = await Question.findOne({
+            where: {id: questionId},
+            relations: {user: true},
+        });
         if (question == null) {
             const errorResponse = ErrorResponse.questionNotFound(questionId);
             response.status(404).json(errorResponse);
@@ -138,7 +144,10 @@ export const questionsController = {
             response.status(400).json(errorResponse);
             return;
         }
-        const question = await Question.findOneBy({id: questionId});
+        const question = await Question.findOne({
+            where: {id: questionId},
+            relations: {user: true},
+        });
         if (question == null){
             const errorResponse = ErrorResponse.questionNotFound(questionId);
             response.status(404).json(errorResponse);
