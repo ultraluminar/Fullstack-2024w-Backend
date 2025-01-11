@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, OneToMany, Relation } from "typeorm";
 import { MinLength, MaxLength, IsEmail, IsNotEmpty } from "class-validator";
 import { hash, compare } from "bcrypt";
 import jwt from 'jsonwebtoken';
@@ -27,7 +27,7 @@ export class User extends BaseEntity {
     email: string
 
     @OneToMany(() => Question, (question) => question.user)
-    questions: Question[]
+    questions: Relation<Question[]>
 
     @CreateDateColumn()
     created_at: Date
