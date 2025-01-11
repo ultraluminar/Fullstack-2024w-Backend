@@ -24,7 +24,8 @@ export class Token {
             return null;
         }
         const payload = Token.decode(authorization);
-        const { userId } = payload?.userId;
+        const userId = payload?.userId;
+
         if (userId == null){
             return null;
         }
