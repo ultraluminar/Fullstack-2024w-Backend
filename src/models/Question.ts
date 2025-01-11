@@ -1,8 +1,7 @@
-import { IsNotEmpty, MaxLength, MinLength, validate } from "class-validator";
+import { IsNotEmpty, MaxLength, MinLength } from "class-validator";
 import { BaseEntity, Column, CreateDateColumn, Entity, FindOptionsWhere, Like, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from "typeorm";
 import { User } from "./User.js";
 import { CreateQuestion } from "./CreateQuestion.js";
-import { Request, Response } from "express";
 
 export enum Sort {
     newest = "newest",

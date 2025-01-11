@@ -1,7 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, OneToMany, Relation } from "typeorm";
 import { MinLength, MaxLength, IsEmail, IsNotEmpty } from "class-validator";
 import { hash, compare } from "bcrypt";
-import jwt from 'jsonwebtoken';
 import { CreateUser } from "./CreateUser.js";
 import { Question } from "./Question.js";
 
