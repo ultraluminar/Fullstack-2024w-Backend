@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, MaxLength, MinLength, validate } from "class-validator";
+import { IsNotEmpty, MaxLength, MinLength, validate } from "class-validator";
 import { BaseEntity, Column, CreateDateColumn, Entity, FindOptionsWhere, Like, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./User.js";
 import { CreateQuestion } from "./CreateQuestion.js";
@@ -33,11 +33,9 @@ export class Question extends BaseEntity {
     user: User
 
     @CreateDateColumn()
-    @IsDate()
     createdAt: Date
 
     @UpdateDateColumn()
-    @IsDate()
     updatedAt: Date
 
     static fromCreateQuestionAndUser(createQuestion: CreateQuestion, user: User): Question{

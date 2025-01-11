@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, OneToMany } from "typeorm";
-import { MinLength, MaxLength, IsEmail, IsNotEmpty, IsDate } from "class-validator";
+import { MinLength, MaxLength, IsEmail, IsNotEmpty } from "class-validator";
 import { hash, compare } from "bcrypt";
 import jwt from 'jsonwebtoken';
 import { CreateUser } from "./CreateUser.js";
@@ -30,7 +30,6 @@ export class User extends BaseEntity {
     questions: Question[]
 
     @CreateDateColumn()
-    @IsDate()
     created_at: Date
 
     static async fromCreateUser(createUser: CreateUser): Promise<User> {
