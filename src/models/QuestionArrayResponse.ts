@@ -12,6 +12,6 @@ export class QuestionArrayResponse extends Array<PublicQuestion> implements Ques
     static async fromSearchQuery(search: string, sort: Sort, page: number): Promise<QuestionArrayResponse> {
         const questionArray = await Question.fromQuery(search, sort, page);
         const publicQuestionArray = questionArray.map(PublicQuestion.fromQuestion);
-        return QuestionArrayResponse.fromAsync(publicQuestionArray);
+        return await QuestionArrayResponse.fromAsync(publicQuestionArray);
     }
 }

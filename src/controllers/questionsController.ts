@@ -20,7 +20,7 @@ export const questionsController = {
             response.redirect(url.toString());
             return;
         }
-        const questionArray = QuestionArrayResponse.fromSearchQuery(search, sort as Sort, Number(page));
+        const questionArray = await QuestionArrayResponse.fromSearchQuery(search, sort as Sort, Number(page));
         response.status(200).json(questionArray);
     },
     async createQuestion(request: Request, response: Response) {
