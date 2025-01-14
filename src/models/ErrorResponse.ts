@@ -35,18 +35,18 @@ export class ErrorResponse implements ErrorResponseInterface {
     }
 
     static usernameAlreadyTaken(username: string): ErrorResponse {
-        return new ErrorResponse(`Nutzername "${username}" bereits vergeben`, 409);
+        return new ErrorResponse(`Nutzername '${username}' bereits vergeben`, 409);
     }
 
     static invalidId(id: number): ErrorResponse {
-        return new ErrorResponse(`Ungültige ID "${id}"`, 400);
+        return new ErrorResponse(`Ungültige ID '${id}'`, 400);
     }
 
     static userNotFound(id: number): ErrorResponse {
-        return new ErrorResponse(`User mit der ID "${id}" nicht gefunden!`, 404);
+        return new ErrorResponse(`User mit der ID '${id}' nicht gefunden!`, 404);
     }
 
     static questionNotFound(id: number): ErrorResponse{
-        return new ErrorResponse(`Frage mit der ID "${id}" nicht gefunden!`, 404);
+        return new ErrorResponse(`Frage mit der ID '${id}' nicht gefunden!`, 404);
     }
 }
