@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn } from "typeorm";
-import { MinLength, MaxLength, IsEmail, IsNotEmpty, IsDate } from "class-validator";
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, OneToMany, Relation } from "typeorm";
+import { MinLength, MaxLength, IsEmail, IsNotEmpty } from "class-validator";
 import { hash, compare } from "bcrypt";
-import jwt from 'jsonwebtoken';
 import { CreateUser } from "./CreateUser.js";
+import { Question } from "./Question.js";
 
 @Entity()
 export class User extends BaseEntity {
@@ -25,8 +25,10 @@ export class User extends BaseEntity {
     @IsNotEmpty({ message: "Email darf nicht leer sein" })
     email: string
 
+    @OneToMany(() => Question, (question) => question.user)
+    questions: Relation<Question[]>
+
     @CreateDateColumn()
-    @IsDate()
     created_at: Date
 
     static async fromCreateUser(createUser: CreateUser): Promise<User> {

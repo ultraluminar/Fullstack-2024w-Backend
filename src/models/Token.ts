@@ -4,7 +4,7 @@ import { SignOptions } from "jsonwebtoken";
 import jwt from 'jsonwebtoken';
 import { User } from "./User.js";
 
-const options: SignOptions = { encoding: '1h' };
+const options: SignOptions = { expiresIn: '1h' };
 
 export class Token {
     userId: number;
@@ -24,7 +24,8 @@ export class Token {
             return null;
         }
         const payload = Token.decode(authorization);
-        const { userId } = payload?.userId;
+        const userId = payload?.userId;
+
         if (userId == null){
             return null;
         }

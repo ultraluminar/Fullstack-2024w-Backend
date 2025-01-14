@@ -10,7 +10,7 @@ export class ErrorResponse implements ErrorResponseInterface {
         this.code = code;
     }
 
-    static fromValidationErrors(errors: ValidationError[], isPasswordValid: boolean): ErrorResponse {
+    static fromValidationErrors(errors: ValidationError[], isPasswordValid: boolean = true): ErrorResponse {
         const messages = errors.map(error => Object.values(error.constraints!)[0]);
         if (!isPasswordValid) {
             messages.push("Passwort ist zu kurz");
@@ -44,5 +44,9 @@ export class ErrorResponse implements ErrorResponseInterface {
 
     static userNotFound(id: number): ErrorResponse {
         return new ErrorResponse(`User mit der ID "${id}" nicht gefunden!`, 404);
+    }
+
+    static questionNotFound(id: number): ErrorResponse{
+        return new ErrorResponse(`Frage mit der ID "${id}" nicht gefunden!`, 404);
     }
 }
