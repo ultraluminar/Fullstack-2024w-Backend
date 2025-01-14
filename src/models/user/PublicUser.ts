@@ -1,5 +1,5 @@
 import { User } from "./User.js";
-import { User as PublicUserInterface } from "./../../../interface/user.js";
+import { User as PublicUserInterface } from "../../../../interface/user.js";
 
 export class PublicUser implements PublicUserInterface {
     id: number;

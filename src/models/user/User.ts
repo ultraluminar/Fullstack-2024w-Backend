@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, CreateDateColumn, O
 import { MinLength, MaxLength, IsEmail, IsNotEmpty } from "class-validator";
 import { hash, compare } from "bcrypt";
 import { CreateUser } from "./CreateUser.js";
-import { Question } from "./Question.js";
+import { Question } from "../question/Question.js";
 
 @Entity()
 export class User extends BaseEntity {

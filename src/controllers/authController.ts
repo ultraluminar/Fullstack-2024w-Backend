@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { validate } from "class-validator";
-import { User } from "../models/User.js";
-import { LoginUser } from '../models/LoginUser.js';
-import { CreateUser } from '../models/CreateUser.js';
-import { LoginResponse } from "../models/LoginResponse.js";
+import { User } from "../models/user/User.js";
+import { LoginUser } from '../models/user/LoginUser.js';
+import { CreateUser } from '../models/user/CreateUser.js';
+import { LoginResponse } from "../models/user/LoginResponse.js";
 import { ErrorResponse } from "../models/ErrorResponse.js";
 import { Token } from "../models/Token.js";
 

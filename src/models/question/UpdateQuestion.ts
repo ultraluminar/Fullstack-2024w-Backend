@@ -1,4 +1,4 @@
-import { UpdateQuestion as UpdateQuestionInterface } from '../../../interface/update-question.js';
+import { UpdateQuestion as UpdateQuestionInterface } from '../../../../interface/update-question.js';
 import { Request } from 'express';
 
 export class UpdateQuestion implements UpdateQuestionInterface {

@@ -1,5 +1,5 @@
 import { ParsedQs } from 'qs';
-import { QuestionArray as QuestionArrayResponseInterface } from '../../../interface/question-array.js';
+import { QuestionArray as QuestionArrayResponseInterface } from '../../../../interface/question-array.js';
 import { PublicQuestion } from './PublicQuestion.js';
 import { Question } from './Question.js';
 

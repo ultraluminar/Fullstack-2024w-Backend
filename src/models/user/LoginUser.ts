@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { LoginUser as LoginUserInterface } from "../../../interface/login-user.js";
+import { LoginUser as LoginUserInterface } from "../../../../interface/login-user.js";
 
 export class LoginUser implements LoginUserInterface {
     username: string;

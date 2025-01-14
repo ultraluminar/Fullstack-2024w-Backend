@@ -1,4 +1,4 @@
-import { LoginResponse as LoginResponseInterface } from "../../../interface/login-response.js"
+import { LoginResponse as LoginResponseInterface } from "../../../../interface/login-response.js"
 
 export class LoginResponse implements LoginResponseInterface {
     token: string;
