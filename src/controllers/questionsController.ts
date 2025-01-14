@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ErrorResponse } from "../models/ErrorResponse.js";
-import { Question, Sort } from "../models/Question.js";
+import { Question } from "../models/Question.js";
 import { PublicQuestion } from "../models/PublicQuestion.js";
 import { UpdateQuestion } from "../models/UpdateQuestion.js";
 import { Token } from "../models/Token.js";
@@ -11,16 +11,7 @@ import { validate } from "class-validator";
 
 export const questionsController = {
     async getQuestions(request: Request, response: Response) {
-        const { search, sort, page } = request.params;
-        if (search == null || sort == null || page == null) {
-            const url = new URL(request.path);
-            url.searchParams.set("search", search ?? "");
-            url.searchParams.set("sort", sort ?? Sort.newest);
-            url.searchParams.set("page", page ?? "1");
-            response.redirect(url.toString());
-            return;
-        }
-        const questionArray = await QuestionArrayResponse.fromSearchQuery(search, sort as Sort, Number(page));
+        const questionArray = await QuestionArrayResponse.fromSearchQuery(request.query);
         response.status(200).json(questionArray);
     },
     async createQuestion(request: Request, response: Response) {

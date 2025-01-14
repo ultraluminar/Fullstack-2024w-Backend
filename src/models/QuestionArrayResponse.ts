@@ -1,6 +1,7 @@
+import { ParsedQs } from 'qs';
 import { QuestionArray as QuestionArrayResponseInterface } from '../../../interface/question-array.js';
 import { PublicQuestion } from './PublicQuestion.js';
-import { Question, Sort } from './Question.js';
+import { Question } from './Question.js';
 
 export class QuestionArrayResponse extends Array<PublicQuestion> implements QuestionArrayResponseInterface {
     static fromArray(array: PublicQuestion[]): QuestionArrayResponse {
@@ -9,8 +10,8 @@ export class QuestionArrayResponse extends Array<PublicQuestion> implements Ques
         return questionArray;
     }
 
-    static async fromSearchQuery(search: string, sort: Sort, page: number): Promise<QuestionArrayResponse> {
-        const questionArray = await Question.fromQuery(search, sort, page);
+    static async fromSearchQuery(query: ParsedQs): Promise<QuestionArrayResponse> {
+        const questionArray = await Question.fromQuery(query);
         const publicQuestionArray = questionArray.map(PublicQuestion.fromQuestion);
         return await QuestionArrayResponse.fromAsync(publicQuestionArray);
     }
