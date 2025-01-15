@@ -60,7 +60,7 @@ export const usersController = {
         }
         const user = await User.findOne({
             where: {id: userId},
-            relations: {questions: true},
+            relations: {questions: { user: true }},
         });
         if (user == null) {
             const errorResponse = ErrorResponse.userNotFound(userId);
