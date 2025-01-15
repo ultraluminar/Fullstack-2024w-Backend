@@ -3,6 +3,8 @@ import { User } from '../models/user/User.js';
 import { PublicUser } from '../models/user/PublicUser.js';
 import { ErrorResponse } from '../models/ErrorResponse.js';
 import { Token } from '../models/Token.js';
+import { QuestionArray as PublicQuestionArray } from "../../../interface/question-array.js";
+import { PublicQuestion } from '../models/PublicQuestion.js';
 
 export const usersController = {
     async getUserById(request: Request, response: Response) {
@@ -51,7 +53,22 @@ export const usersController = {
         response.status(204).end();
     },
     async getAllQuestionsFromUser(request: Request, response: Response) {
-        // TODO: implement
-        response.status(501).end();
+        const userId = Number(request.params.userId);
+        if (isNaN(userId)) {
+            const errorResponse = ErrorResponse.invalidId(userId);
+            response.status(400).json(errorResponse);
+            return;
+        }
+        const user = await User.findOne({
+            where: {id: userId},
+            relations: {questions: { user: true }},
+        });
+        if (user == null) {
+            const errorResponse = ErrorResponse.userNotFound(userId);
+            response.status(404).json(errorResponse);
+            return;
+        }
+        const publicQuestionArray: PublicQuestionArray = user.questions.map(PublicQuestion.fromQuestion);
+        response.status(200).json(publicQuestionArray);
     },
 }
