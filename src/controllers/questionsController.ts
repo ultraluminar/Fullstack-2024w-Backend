@@ -8,6 +8,8 @@ import { User } from "../models/user/User.js";
 import { CreateQuestion } from "../models/question/CreateQuestion.js";
 import { QuestionArrayResponse } from "../models/question/QuestionArrayResponse.js";
 import { validate } from "class-validator";
+import { PublicAnswer } from "../models/answer/PublicAnswer.js";
+import { AnswerArray as PublicAnswerArray } from "../../../interface/answer-array.js";
 
 export const questionsController = {
     async getQuestions(request: Request, response: Response) {
@@ -161,8 +163,23 @@ export const questionsController = {
         response.status(204).end();
     },
     async getAllAnswersFromQuestion(request: Request, response: Response) {
-        //TODO: implement
-        response.sendStatus(501);
+        const questionId = Number(request.params.questionId);
+        if (isNaN(questionId)) {
+            const errorResponse = ErrorResponse.invalidId(questionId);
+            response.status(400).json(errorResponse);
+            return;
+        }
+        const question = await Question.findOne({
+            where: { id: questionId },
+            relations: { answers: { user: true } },
+        });
+        if (question == null) {
+            const errorResponse = ErrorResponse.questionNotFound(questionId);
+            response.status(404).json(errorResponse);
+            return;
+        }
+        const publicAnswerArray: PublicAnswerArray = question.answers.map(PublicAnswer.fromAnswer);
+        response.status(200).json(publicAnswerArray);
     },
     async createAnswer(request: Request, response: Response) {
         //TODO: implement
