@@ -3,7 +3,7 @@ import { User } from '../models/User.js';
 import { PublicUser } from '../models/PublicUser.js';
 import { ErrorResponse } from '../models/ErrorResponse.js';
 import { Token } from '../models/Token.js';
-import { QuestionArrayResponse } from '../models/QuestionArrayResponse.js';
+import { PublicQuestionArray } from '../models/PublicQuestionArray.js';
 
 export const usersController = {
     async getUserById(request: Request, response: Response) {
@@ -67,7 +67,7 @@ export const usersController = {
             response.status(404).json(errorResponse);
             return;
         }
-        const questionArrayResponse = await QuestionArrayResponse.fromQuestionArray(user.questions);
-        response.status(200).json(questionArrayResponse);
+        const publicQuestionArray = await PublicQuestionArray.fromQuestionArray(user.questions);
+        response.status(200).json(publicQuestionArray);
     },
 }
