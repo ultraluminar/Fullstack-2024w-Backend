@@ -6,13 +6,13 @@ import { UpdateQuestion } from "../models/UpdateQuestion.js";
 import { Token } from "../models/Token.js";
 import { User } from "../models/User.js";
 import { CreateQuestion } from "../models/CreateQuestion.js";
-import { PublicQuestionArray } from "../models/PublicQuestionArray.js";
+import { QuestionArray as PublicQuestionArray } from "../../../interface/question-array.js";
 import { validate } from "class-validator";
 
 export const questionsController = {
     async getQuestions(request: Request, response: Response) {
         const questionArray = await Question.fromQuery(request.query);
-        const publicQuestionArray = await PublicQuestionArray.fromQuestionArray(questionArray);
+        const publicQuestionArray: PublicQuestionArray = questionArray.map(PublicQuestion.fromQuestion);
         response.status(200).json(publicQuestionArray);
     },
     async createQuestion(request: Request, response: Response) {
