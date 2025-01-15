@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { CreateUser as CreateUserInterface} from "../../../interface/create-user.js";
+import { CreateUser as CreateUserInterface} from "../../../../interface/create-user.js";
 
 export class CreateUser implements CreateUserInterface {
     username: string;

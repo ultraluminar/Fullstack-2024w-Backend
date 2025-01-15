@@ -2,7 +2,7 @@ import { Request } from "express";
 import { SignOptions } from "jsonwebtoken";
 
 import jwt from 'jsonwebtoken';
-import { User } from "./User.js";
+import { User } from "./user/User.js";
 
 const options: SignOptions = { expiresIn: '1h' };
 

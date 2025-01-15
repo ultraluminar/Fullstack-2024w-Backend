@@ -1,6 +1,6 @@
 import { IsNotEmpty, MaxLength, MinLength } from "class-validator";
 import { BaseEntity, Column, CreateDateColumn, Entity, ILike, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from "typeorm";
-import { User } from "./User.js";
+import { User } from "../user/User.js";
 import { CreateQuestion } from "./CreateQuestion.js";
 import { ParsedQs } from "qs";
 

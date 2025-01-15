@@ -1,4 +1,4 @@
-import { Question as QuestionInterface } from '../../../interface/question.js';
+import { Question as QuestionInterface } from '../../../../interface/question.js';
 import { Question } from './Question.js';
 
 export class PublicQuestion implements QuestionInterface {

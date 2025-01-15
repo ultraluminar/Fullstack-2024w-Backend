@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { ErrorResponse } from "../models/ErrorResponse.js";
-import { Question } from "../models/Question.js";
-import { PublicQuestion } from "../models/PublicQuestion.js";
-import { UpdateQuestion } from "../models/UpdateQuestion.js";
+import { Question } from "../models/question/Question.js";
+import { PublicQuestion } from "../models/question/PublicQuestion.js";
+import { UpdateQuestion } from "../models/question/UpdateQuestion.js";
 import { Token } from "../models/Token.js";
-import { User } from "../models/User.js";
-import { CreateQuestion } from "../models/CreateQuestion.js";
 import { QuestionArray as PublicQuestionArray } from "../../../interface/question-array.js";
+import { User } from "../models/user/User.js";
+import { CreateQuestion } from "../models/question/CreateQuestion.js";
 import { validate } from "class-validator";
 
 export const questionsController = {

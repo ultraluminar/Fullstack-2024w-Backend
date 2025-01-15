@@ -1,4 +1,4 @@
-import { CreateQuestion as CreateQuestionInterface } from '../../../interface/create-question.js';
+import { CreateQuestion as CreateQuestionInterface } from '../../../../interface/create-question.js';
 
 export class CreateQuestion implements CreateQuestionInterface {
     title: string;

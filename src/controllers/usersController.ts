@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { User } from '../models/User.js';
-import { PublicUser } from '../models/PublicUser.js';
+import { User } from '../models/user/User.js';
+import { PublicUser } from '../models/user/PublicUser.js';
 import { ErrorResponse } from '../models/ErrorResponse.js';
 import { Token } from '../models/Token.js';
 import { QuestionArray as PublicQuestionArray } from "../../../interface/question-array.js";
