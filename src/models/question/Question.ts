@@ -62,12 +62,12 @@ export class Question extends BaseEntity {
                 order: { createdAt: sort === Sort.oldest ? "DESC" : "ASC" },
                 skip: offset,
                 take: pageSize,
-                relations: ["user"]
+                relations: { user: true },
             }
         );
     }
 
-    async getVotes(): Promise<number>{
+    getVotes(): number{
         // TODO: implement
         return 69;
     }
