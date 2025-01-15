@@ -1,10 +1,12 @@
 import "reflect-metadata";
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
+
 import { AppDataSource } from "./data-source.js";
 import { usersRouter } from './routes/usersRouter.js';
 import { questionsRouter } from "./routes/questionsRouter.js";
-import cors from 'cors';
+import { answersRouter } from "./routes/answersRouter.js";
 
 
 await AppDataSource.initialize();
@@ -19,6 +21,7 @@ app.use(express.json());
 
 app.use('/users', usersRouter);
 app.use('/questions', questionsRouter);
+app.use('/answers', answersRouter);
 
 const { BACKEND_PORT_INTERNAL, BACKEND_PORT } = process.env;
 
