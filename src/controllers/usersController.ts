@@ -4,7 +4,7 @@ import { PublicUser } from '../models/user/PublicUser.js';
 import { ErrorResponse } from '../models/ErrorResponse.js';
 import { Token } from '../models/Token.js';
 import { QuestionArray as PublicQuestionArray } from "../../../interface/question-array.js";
-import { PublicQuestion } from '../models/PublicQuestion.js';
+import { PublicQuestion } from '../models/question/PublicQuestion.js';
 
 export const usersController = {
     async getUserById(request: Request, response: Response) {
