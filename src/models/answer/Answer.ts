@@ -1,8 +1,10 @@
 import { MinLength, IsNotEmpty } from "class-validator";
-import { BaseEntity, Column, CreateDateColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from "typeorm";
 import { User } from "../user/User.js";
 import { Question } from "../question/Question.js";
+import { CreateAnswer } from "./CreateAnswer.js";
 
+@Entity()
 export class Answer extends BaseEntity {
 
     @PrimaryGeneratedColumn()
