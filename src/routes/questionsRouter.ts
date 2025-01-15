@@ -6,4 +6,6 @@ export const questionsRouter = Router()
     .post('/', questionsController.createQuestion)
     .get('/:questionId', questionsController.getQuestionById)
     .patch('/:questionId', questionsController.updateQuestion)
-    .delete('/:questionId', questionsController.deleteQuestion);
+    .delete('/:questionId', questionsController.deleteQuestion)
+    .get('/:questionId/answers', questionsController.getAllAnswersFromQuestion)
+    .post('/:questionId/answers', questionsController.createAnswer);
