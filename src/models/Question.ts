@@ -67,7 +67,7 @@ export class Question extends BaseEntity {
         );
     }
 
-    async getVotes(): Promise<number>{
+    getVotes(): number{
         // TODO: implement
         return 69;
     }

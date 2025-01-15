@@ -20,13 +20,13 @@ export class PublicQuestion implements QuestionInterface {
         this.updatedAt = updatedAt;
     }
 
-    static async fromQuestion(question: Question): Promise<PublicQuestion>{
+    static fromQuestion(question: Question): PublicQuestion{
         return new PublicQuestion(
             question.id,
             question.title,
             question.body,
             question.user.id,
-            await question.getVotes(),
+            question.getVotes(),
             question.createdAt,
             question.updatedAt,
         );
