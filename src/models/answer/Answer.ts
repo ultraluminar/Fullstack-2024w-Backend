@@ -31,4 +31,12 @@ export class Answer extends BaseEntity {
         // TODO: implement
         return 69;
     }
+
+    static fromCreateAnswer(createAnswer: CreateAnswer, user: User, question: Question): Answer{
+        return Answer.create({
+            body: createAnswer.body,
+            user: user,
+            question: question,
+        });
+    }
 }
