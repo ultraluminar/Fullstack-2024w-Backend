@@ -220,6 +220,12 @@ export const questionsController = {
             return;
         }
         const answer = Answer.fromCreateAnswer(createAnswer, user, question);
+        const errors = await validate(answer);
+        if (errors.length > 0) {
+            const errorResponse = ErrorResponse.fromValidationErrors(errors);
+            response.status(400).json(errorResponse);
+            return;
+        }
         await answer.save();
 
         const publicAnswer = PublicAnswer.fromAnswer(answer);
