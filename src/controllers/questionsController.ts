@@ -160,7 +160,7 @@ export const questionsController = {
         console.log(`Question with ID "${questionId}" removed`);
         response.status(204).end();
     },
-    async getAllAnswers(request: Request, response: Response) {
+    async getAllAnswersFromQuestion(request: Request, response: Response) {
         //TODO: implement
         response.sendStatus(501);
     },
