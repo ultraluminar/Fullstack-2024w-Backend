@@ -11,8 +11,9 @@ import { validate } from "class-validator";
 
 export const questionsController = {
     async getQuestions(request: Request, response: Response) {
-        const questionArray = await QuestionArrayResponse.fromSearchQuery(request.query);
-        response.status(200).json(questionArray);
+        const questionArray = await Question.fromQuery(request.query);
+        const questionArrayResponse = await QuestionArrayResponse.fromQuestionArray(questionArray);
+        response.status(200).json(questionArrayResponse);
     },
     async createQuestion(request: Request, response: Response) {
         const token = Token.fromRequest(request);
