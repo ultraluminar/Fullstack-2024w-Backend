@@ -67,7 +67,7 @@ export const usersController = {
             response.status(404).json(errorResponse);
             return;
         }
-        const questionArrayResponse = QuestionArrayResponse.fromQuestionArray(user.questions);
+        const questionArrayResponse = await QuestionArrayResponse.fromQuestionArray(user.questions);
         response.status(200).json(questionArrayResponse);
     },
 }
