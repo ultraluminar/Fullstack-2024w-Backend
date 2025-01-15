@@ -3,6 +3,7 @@ import { MinLength, MaxLength, IsEmail, IsNotEmpty } from "class-validator";
 import { hash, compare } from "bcrypt";
 import { CreateUser } from "./CreateUser.js";
 import { Question } from "../question/Question.js";
+import { Answer } from "../answer/Answer.js";
 
 @Entity()
 export class User extends BaseEntity {
@@ -27,6 +28,9 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Question, (question) => question.user)
     questions: Relation<Question[]>
+
+    @OneToMany(() => Answer, (answer) => answer.user)
+    answers: Relation<Answer[]>
 
     @CreateDateColumn()
     created_at: Date
