@@ -3,14 +3,17 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
-import { AppDataSource } from "./data-source.js";
+import { postgresDataSource, mongoDBDataSource } from "./data-source.js";
 import { usersRouter } from './routes/usersRouter.js';
 import { questionsRouter } from "./routes/questionsRouter.js";
 import { answersRouter } from "./routes/answersRouter.js";
 
 
-await AppDataSource.initialize();
-console.log("AppDataSource initialized successfully");
+await postgresDataSource.initialize();
+console.log("postgresDataSource initialized successfully");
+
+await mongoDBDataSource.initialize();
+console.log("mongoDBDataSource initialized successfully");
 
 const app = express();
 
