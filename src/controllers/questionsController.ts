@@ -8,6 +8,10 @@ import { QuestionArray as PublicQuestionArray } from "../../../interface/questio
 import { User } from "../models/user/User.js";
 import { CreateQuestion } from "../models/question/CreateQuestion.js";
 import { validate } from "class-validator";
+import { PublicAnswer } from "../models/answer/PublicAnswer.js";
+import { AnswerArray as PublicAnswerArray } from "../../../interface/answer-array.js";
+import { CreateAnswer } from "../models/answer/CreateAnswer.js";
+import { Answer } from "../models/answer/Answer.js";
 
 export const questionsController = {
     async getQuestions(request: Request, response: Response) {
@@ -161,4 +165,70 @@ export const questionsController = {
         console.log(`Question with ID "${questionId}" removed`);
         response.status(204).end();
     },
+    async getAllAnswersFromQuestion(request: Request, response: Response) {
+        const questionId = Number(request.params.questionId);
+        if (isNaN(questionId)) {
+            const errorResponse = ErrorResponse.invalidId(questionId);
+            response.status(400).json(errorResponse);
+            return;
+        }
+        const question = await Question.findOne({
+            where: { id: questionId },
+            relations: { answers: { user: true } },
+        });
+        if (question == null) {
+            const errorResponse = ErrorResponse.questionNotFound(questionId);
+            response.status(404).json(errorResponse);
+            return;
+        }
+        const publicAnswerArray: PublicAnswerArray = question.answers.map(PublicAnswer.fromAnswer);
+        response.status(200).json(publicAnswerArray);
+    },
+    async createAnswer(request: Request, response: Response) {
+        const token = Token.fromRequest(request);
+        if (token == null) {
+            const errorResponse = ErrorResponse.invalidToken();
+            response.status(401).json(errorResponse);
+            return;
+        }
+        const userId = token.userId;
+        const user = await User.findOneBy({ id: userId });
+        if (user == null) {
+            const errorResponse = ErrorResponse.userNotFound(userId);
+            response.status(404).json(errorResponse);
+            return;
+        }
+        const questionId = Number(request.params.questionId);
+        if (isNaN(questionId)) {
+            const errorResponse = ErrorResponse.invalidId(questionId);
+            response.status(400).json(errorResponse);
+            return;
+        }
+        const question = await Question.findOne({
+            where: { id: questionId },
+            relations: { answers: true, user: true },
+        });
+        if (question == null) {
+            const errorResponse = ErrorResponse.questionNotFound(questionId);
+            response.status(404).json(errorResponse);
+            return;
+        }
+        const createAnswer = CreateAnswer.fromRequest(request);
+        if (createAnswer == null) {
+            const errorResponse = ErrorResponse.badParameters();
+            response.status(400).json(errorResponse);
+            return;
+        }
+        const answer = Answer.fromCreateAnswer(createAnswer, user, question);
+        const errors = await validate(answer);
+        if (errors.length > 0) {
+            const errorResponse = ErrorResponse.fromValidationErrors(errors);
+            response.status(400).json(errorResponse);
+            return;
+        }
+        await answer.save();
+
+        const publicAnswer = PublicAnswer.fromAnswer(answer);
+        response.status(201).json(publicAnswer);
+    }
 };

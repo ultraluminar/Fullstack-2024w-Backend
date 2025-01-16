@@ -1,8 +1,9 @@
 import { IsNotEmpty, MaxLength, MinLength } from "class-validator";
-import { BaseEntity, Column, CreateDateColumn, Entity, ILike, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ILike, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from "typeorm";
 import { User } from "../user/User.js";
 import { CreateQuestion } from "./CreateQuestion.js";
 import { ParsedQs } from "qs";
+import { Answer } from "../answer/Answer.js";
 
 export enum Sort {
     newest = "newest",
@@ -30,6 +31,9 @@ export class Question extends BaseEntity {
 
     @ManyToOne(() => User, (user) => user.questions)
     user: Relation<User>
+
+    @OneToMany(() => Answer, (answer) => answer.question)
+    answers: Relation<Answer[]>
 
     @CreateDateColumn()
     createdAt: Date

@@ -49,4 +49,7 @@ export class ErrorResponse implements ErrorResponseInterface {
     static questionNotFound(id: number): ErrorResponse{
         return new ErrorResponse(`Frage mit der ID '${id}' nicht gefunden!`, 404);
     }
+    static answerNotFound(id: number): ErrorResponse {
+        return new ErrorResponse(`Antwort mit der ID '${id}' nicht gefunden!`, 404);
+    }
 }
