@@ -39,10 +39,7 @@ export const answersController = {
             response.status(400).json(errorResponse);
             return;
         }
-        const answer = await Answer.findOne({
-            where: { id: answerId },
-            relations: { user: true, question: true },
-        });
+        const answer = await Answer.findOneBy({ id: answerId });
         if (answer == null) {
             const errorResponse = ErrorResponse.questionNotFound(answerId);
             response.status(404).json(errorResponse);
