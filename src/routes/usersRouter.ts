@@ -7,4 +7,5 @@ export const usersRouter = Router()
     .post('/register', authController.register)
     .delete('/:userId', usersController.deleteUser)
     .get('/:userId', usersController.getUserById)
+    .get('/:userId/stats', usersController.getUserStats)
     .get('/:userId/questions', usersController.getAllQuestionsFromUser);

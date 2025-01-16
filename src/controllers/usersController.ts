@@ -5,6 +5,7 @@ import { ErrorResponse } from '../models/ErrorResponse.js';
 import { Token } from '../models/Token.js';
 import { QuestionArray as PublicQuestionArray } from "../../../interface/question-array.js";
 import { PublicQuestion } from '../models/question/PublicQuestion.js';
+import { MongoDBUser } from '../models/user/MongoDBUser.js';
 
 export const usersController = {
     async getUserById(request: Request, response: Response) {
@@ -71,4 +72,20 @@ export const usersController = {
         const publicQuestionArray: PublicQuestionArray = user.questions.map(PublicQuestion.fromQuestion);
         response.status(200).json(publicQuestionArray);
     },
+    async getUserStats(request: Request, response: Response){
+        const userId = Number(request.params.userId);
+        if (isNaN(userId)) {
+            const errorResponse = ErrorResponse.invalidId(userId);
+            response.status(400).json(errorResponse);
+            return;
+        }
+        const user = await User.findOneBy({ id: userId });
+        if (user == null) {
+            const errorResponse = ErrorResponse.userNotFound(userId);
+            response.status(404).json(errorResponse);
+            return;
+        }
+        const mongoDBUser = await MongoDBUser.findOrCreate(userId);
+        response.status(200).json(mongoDBUser);
+    }
 }
