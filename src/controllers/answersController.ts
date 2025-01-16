@@ -41,7 +41,7 @@ export const answersController = {
         }
         const answer = await Answer.findOneBy({ id: answerId });
         if (answer == null) {
-            const errorResponse = ErrorResponse.questionNotFound(answerId);
+            const errorResponse = ErrorResponse.answerNotFound(answerId);
             response.status(404).json(errorResponse);
             return;
         }
