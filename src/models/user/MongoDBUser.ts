@@ -13,7 +13,7 @@ export class MongoDBUser extends BaseEntity {
     loginCouter: number = 0;
 
     @Column()
-    questionsCreate: number = 0;
+    questionsCreated: number = 0;
 
     @Column()
     questionsUpdated: number = 0;
