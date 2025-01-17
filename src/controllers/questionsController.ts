@@ -12,6 +12,7 @@ import { PublicAnswer } from "../models/answer/PublicAnswer.js";
 import { AnswerArray as PublicAnswerArray } from "../../../interface/answer-array.js";
 import { CreateAnswer } from "../models/answer/CreateAnswer.js";
 import { Answer } from "../models/answer/Answer.js";
+import { MongoDBUser } from "../models/user/MongoDBUser.js";
 
 export const questionsController = {
     async getQuestions(request: Request, response: Response) {
@@ -48,6 +49,11 @@ export const questionsController = {
         }
         await question.save();
         const publicQuestion = await PublicQuestion.fromQuestion(question);
+
+        const mongoDBUser = await MongoDBUser.findOrCreate(user.id);
+        mongoDBUser.questionsCreated += 1;
+        await mongoDBUser.save();
+
         response.status(201).json(publicQuestion);
     },
     async getQuestionById(request: Request, response: Response) {
@@ -124,6 +130,11 @@ export const questionsController = {
         }
         await question.save();
         const publicQuestion = await PublicQuestion.fromQuestion(question);
+
+        const mongoDBUser = await MongoDBUser.findOrCreate(user.id);
+        mongoDBUser.questionsUpdated += 1;
+        await mongoDBUser.save();
+
         response.status(200).json(publicQuestion);
 
     },
@@ -163,6 +174,11 @@ export const questionsController = {
         }
         await question.remove();
         console.log(`Question with ID "${questionId}" removed`);
+
+        const mongoDBUser = await MongoDBUser.findOrCreate(user.id);
+        mongoDBUser.questionsDeleted += 1;
+        await mongoDBUser.save();
+
         response.status(204).end();
     },
     async getAllAnswersFromQuestion(request: Request, response: Response) {
@@ -227,8 +243,12 @@ export const questionsController = {
             return;
         }
         await answer.save();
-
         const publicAnswer = PublicAnswer.fromAnswer(answer);
+
+        const mongoDBUser = await MongoDBUser.findOrCreate(user.id);
+        mongoDBUser.answersCreated += 1;
+        await mongoDBUser.save();
+
         response.status(201).json(publicAnswer);
     }
 };

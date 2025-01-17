@@ -6,6 +6,7 @@ import { CreateUser } from '../models/user/CreateUser.js';
 import { LoginResponse } from "../models/user/LoginResponse.js";
 import { ErrorResponse } from "../models/ErrorResponse.js";
 import { Token } from "../models/Token.js";
+import { MongoDBUser } from "../models/user/MongoDBUser.js";
 
 function validatePassword(password: string): boolean {
     return password.length >= 8;
@@ -32,6 +33,11 @@ export const authController = {
         }
         const tokenString = Token.generateFromUser(user);
         const loginResponse = new LoginResponse(tokenString);
+
+        const mongoDBUser = await MongoDBUser.findOrCreate(user.id);
+        mongoDBUser.loginCouter += 1;
+        await mongoDBUser.save();
+
         response.status(200).json(loginResponse);
     },
 

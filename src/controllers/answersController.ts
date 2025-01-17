@@ -5,6 +5,7 @@ import { PublicAnswer } from "../models/answer/PublicAnswer.js";
 import { Token } from "../models/Token.js";
 import { User } from "../models/user/User.js";
 import { UpdateAnswer } from "../models/answer/UpdateAnswer.js";
+import { MongoDBUser } from "../models/user/MongoDBUser.js";
 
 export const answersController = {
     async getAnswerById(request: Request, response: Response) {
@@ -59,6 +60,11 @@ export const answersController = {
         answer.body = updateAnswer.body;
         await answer.save();
         const publicAnswer = PublicAnswer.fromAnswer(answer);
+
+        const mongoDBUser = await MongoDBUser.findOrCreate(answer.user.id);
+        mongoDBUser.answersUpdated += 1;
+        await mongoDBUser.save();
+
         response.status(200).json(publicAnswer);
 
 
@@ -99,6 +105,11 @@ export const answersController = {
         }
         await answer.remove();
         console.log(`Answer with ID "${answerId}" removed`);
+
+        const mongoDBUser = await MongoDBUser.findOrCreate(user.id);
+        mongoDBUser.answersDeleted += 1;
+        await mongoDBUser.save();
+
         response.status(204).end();
     },
 };
