@@ -4,12 +4,12 @@ import { User as PublicUserInterface } from "../../../../interface/user.js";
 export class PublicUser implements PublicUserInterface {
     id: number;
     username: string;
-    created_at: Date;
+    createdAt: Date;
 
     constructor(id: number, username: string, created_at: Date) {
         this.id = id;
         this.username = username;
-        this.created_at = created_at;
+        this.createdAt = created_at;
     }
 
     static fromUser(user: User): PublicUser {
