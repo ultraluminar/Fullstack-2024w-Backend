@@ -53,7 +53,7 @@ export class InvalidIdResponse extends ErrorResponseBase {
 }
 
 export class UsernameNotFoundResponse extends ErrorResponseBase {
-    static code = 409;
+    static code = 404;
 
     static send(response: Response, id: number) {
         this.error = `Benutzer mit der ID '${id}' nicht gefunden!`;
