@@ -30,6 +30,7 @@ export class MongoDBUser extends BaseEntity {
     answersDeleted: number;
 
     static async findOrCreate(userId: number): Promise<MongoDBUser> {
-        return (await MongoDBUser.findOneBy({ userId: userId })) ?? MongoDBUser.create({ userId: userId });
+        const user = await MongoDBUser.findOneBy({ userId: userId });
+        return user ?? MongoDBUser.create({ userId: userId });
     }
 }
