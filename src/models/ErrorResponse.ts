@@ -52,7 +52,7 @@ export class InvalidIdResponse extends ErrorResponseBase {
     }
 }
 
-export class UsernameNotFoundResponse extends ErrorResponseBase {
+export class UserNotFoundResponse extends ErrorResponseBase {
     static code = 404;
 
     static send(response: Response, id: number) {

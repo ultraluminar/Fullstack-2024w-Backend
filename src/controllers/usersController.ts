@@ -9,7 +9,7 @@ import {
     ForbiddenActionResponse,
     InvalidIdResponse,
     InvalidTokenResponse,
-    UsernameNotFoundResponse,
+    UserNotFoundResponse,
 } from "../models/ErrorResponse.js";
 
 export const usersController = {
@@ -20,7 +20,7 @@ export const usersController = {
         }
         const user = await User.findOneBy({id: userId});
         if (user == null) {
-            return UsernameNotFoundResponse.send(response, userId);
+            return UserNotFoundResponse.send(response, userId);
         }
         const publicUser = PublicUser.fromUser(user);
         response.status(200).json(publicUser);
@@ -37,7 +37,7 @@ export const usersController = {
         }
         const user = await User.findOneBy({id: userId});
         if (user == null) {
-            return UsernameNotFoundResponse.send(response, userId);
+            return UserNotFoundResponse.send(response, userId);
         }
         if (token.isAutherizedUser(user)) {
             return ForbiddenActionResponse.send(response);
@@ -56,7 +56,7 @@ export const usersController = {
             relations: {questions: { user: true }},
         });
         if (user == null) {
-            return UsernameNotFoundResponse.send(response, userId);
+            return UserNotFoundResponse.send(response, userId);
         }
         const publicQuestionArray: PublicQuestionArray = user.questions.map(PublicQuestion.fromQuestion);
         response.status(200).json(publicQuestionArray);
@@ -68,7 +68,7 @@ export const usersController = {
         }
         const user = await User.findOneBy({ id: userId });
         if (user == null) {
-            return UsernameNotFoundResponse.send(response, userId);
+            return UserNotFoundResponse.send(response, userId);
         }
         const mongoDBUser = await MongoDBUser.findOrCreate(userId);
         response.status(200).json(mongoDBUser);

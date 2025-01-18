@@ -12,7 +12,7 @@ import {
     InvalidIdResponse,
     InvalidTokenResponse,
     QuestionNotFoundResponse,
-    UsernameNotFoundResponse,
+    UserNotFoundResponse,
 } from "../models/ErrorResponse.js";
 
 export const answersController = {
@@ -71,7 +71,7 @@ export const answersController = {
         const userId = token.userId;
         const user = await User.findOneBy({ id: userId });
         if (user == null) {
-            return UsernameNotFoundResponse.send(response, userId);
+            return UserNotFoundResponse.send(response, userId);
         }
         const answerId = Number(request.params.answerId);
         if (isNaN(answerId)){

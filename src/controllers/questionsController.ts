@@ -12,7 +12,15 @@ import { AnswerArray as PublicAnswerArray } from "../../../interface/answer-arra
 import { CreateAnswer } from "../models/answer/CreateAnswer.js";
 import { Answer } from "../models/answer/Answer.js";
 import { MongoDBUser } from "../models/user/MongoDBUser.js";
-import { BadParametersResponse, ForbiddenActionResponse, InvalidIdResponse, InvalidTokenResponse, QuestionNotFoundResponse, UsernameNotFoundResponse, ValidationErrorResponse } from "../models/ErrorResponse.js";
+import {
+    BadParametersResponse,
+    ForbiddenActionResponse,
+    InvalidIdResponse,
+    InvalidTokenResponse,
+    QuestionNotFoundResponse,
+    UserNotFoundResponse,
+    ValidationErrorResponse,
+} from "../models/ErrorResponse.js";
 
 export const questionsController = {
     async getQuestions(request: Request, response: Response) {
@@ -32,7 +40,7 @@ export const questionsController = {
         const userId = token.userId;
         const user = await User.findOneBy({ id: userId });
         if (user == null) {
-            return UsernameNotFoundResponse.send(response, userId);
+            return UserNotFoundResponse.send(response, userId);
         }
         const question = Question.fromCreateQuestionAndUser(createQuestion, user);
         const errors = await validate(question);
@@ -87,7 +95,7 @@ export const questionsController = {
         const userId = token.userId;
         const user = await User.findOneBy({ id: userId });
         if (user == null) {
-            return UsernameNotFoundResponse.send(response, userId);
+            return UserNotFoundResponse.send(response, userId);
         }
         if (token.isAutherizedUser(question.user)) {
             return ForbiddenActionResponse.send(response);
@@ -131,7 +139,7 @@ export const questionsController = {
         const userId = token.userId;
         const user = await User.findOneBy({id: userId});
         if (user == null) {
-            return UsernameNotFoundResponse.send(response, userId);
+            return UserNotFoundResponse.send(response, userId);
         }
         if (token.isAutherizedUser(question.user)) {
             return ForbiddenActionResponse.send(response);
@@ -167,7 +175,7 @@ export const questionsController = {
         const userId = token.userId;
         const user = await User.findOneBy({ id: userId });
         if (user == null) {
-            return UsernameNotFoundResponse.send(response, userId);
+            return UserNotFoundResponse.send(response, userId);
         }
         const questionId = Number(request.params.questionId);
         if (isNaN(questionId)) {
