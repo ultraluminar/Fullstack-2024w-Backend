@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import { validate, ValidationError } from "class-validator";
+import { validate } from "class-validator";
 import { User } from "../models/user/User.js";
 import { LoginUser } from '../models/user/LoginUser.js';
 import { CreateUser } from '../models/user/CreateUser.js';
 import { LoginResponse } from "../models/user/LoginResponse.js";
-import { Token } from "../models/Token.js";
 import { MongoDBUser } from "../models/user/MongoDBUser.js";
 import {
     BadParametersResponse,
@@ -42,9 +41,7 @@ export const authController = {
         const user = await User.fromCreateUser(createUser);
         const errors = await validate(createUser);
         if (errors.length > 0) {
-            const errorResponse = ErrorResponse.fromValidationErrors(errors, isPasswordValid);
-            response.status(400).json(errorResponse);
-            return;
+            ValidationErrorResponse.send(response, errors);
         }
         await user.save();
 
