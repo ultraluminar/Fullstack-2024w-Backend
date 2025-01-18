@@ -12,9 +12,6 @@ export class User extends BaseEntity {
     id: number
 
     @Column({length: 30})
-    @MinLength(3, { message: "Benutzername ist zu kurz" })
-    @MaxLength(30, { message: "Benutzername ist zu lang" })
-    @IsNotEmpty({ message: "Benutzername darf nicht leer sein" })
     username: string
 
     @Column()
@@ -22,8 +19,6 @@ export class User extends BaseEntity {
     password_hash: string
 
     @Column("text")
-    @IsEmail()
-    @IsNotEmpty({ message: "Email darf nicht leer sein" })
     email: string
 
     @OneToMany(() => Question, (question) => question.user)

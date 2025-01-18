@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { ErrorResponse } from "../models/ErrorResponse.js";
 import { Question } from "../models/question/Question.js";
 import { PublicQuestion } from "../models/question/PublicQuestion.js";
 import { UpdateQuestion } from "../models/question/UpdateQuestion.js";
@@ -13,6 +12,7 @@ import { AnswerArray as PublicAnswerArray } from "../../../interface/answer-arra
 import { CreateAnswer } from "../models/answer/CreateAnswer.js";
 import { Answer } from "../models/answer/Answer.js";
 import { MongoDBUser } from "../models/user/MongoDBUser.js";
+import { BadParametersResponse, ForbiddenActionResponse, InvalidIdResponse, InvalidTokenResponse, QuestionNotFoundResponse, UsernameNotFoundResponse, ValidationErrorResponse } from "../models/ErrorResponse.js";
 
 export const questionsController = {
     async getQuestions(request: Request, response: Response) {
@@ -23,29 +23,21 @@ export const questionsController = {
     async createQuestion(request: Request, response: Response) {
         const token = Token.fromRequest(request);
         if (token == null) {
-            const errorResponse = ErrorResponse.invalidToken();
-            response.status(401).json(errorResponse);
-            return;
+            return InvalidTokenResponse.send(response);
         }
         const createQuestion = CreateQuestion.fromRequest(request);
         if (createQuestion == null){
-            const errorResponse = ErrorResponse.badParameters();
-            response.status(400).json(errorResponse);
-            return;
+            return BadParametersResponse.send(response);
         }
         const userId = token.userId;
         const user = await User.findOneBy({ id: userId });
         if (user == null) {
-            const errorResponse = ErrorResponse.userNotFound(userId);
-            response.status(404).json(errorResponse);
-            return;
+            return UsernameNotFoundResponse.send(response, userId);
         }
         const question = Question.fromCreateQuestionAndUser(createQuestion, user);
         const errors = await validate(question);
         if (errors.length > 0) {
-            const errorResponse = ErrorResponse.fromValidationErrors(errors);
-            response.status(400).json(errorResponse);
-            return;
+            return ValidationErrorResponse.send(response, errors);
         }
         await question.save();
         const publicQuestion = await PublicQuestion.fromQuestion(question);
@@ -59,18 +51,14 @@ export const questionsController = {
     async getQuestionById(request: Request, response: Response) {
         const questionId = Number(request.params.questionId);
         if (isNaN(questionId)){
-            const errorResponse = ErrorResponse.invalidId(questionId);
-            response.status(400).json(errorResponse);
-            return;
+            return InvalidIdResponse.send(response, questionId);
         }
         const question = await Question.findOne({
             where: {id: questionId},
             relations: {user: true},
         });
         if (question == null){
-            const errorResponse = ErrorResponse.questionNotFound(questionId);
-            response.status(404).json(errorResponse);
-            return;
+            return QuestionNotFoundResponse.send(response, questionId);
         }
         const publicQuestion = await PublicQuestion.fromQuestion(question);
         response.status(200).json(publicQuestion);
@@ -79,42 +67,30 @@ export const questionsController = {
     async updateQuestion(request: Request, response: Response) {
         const token = Token.fromRequest(request);
         if (token == null) {
-            const errorResponse = ErrorResponse.invalidToken();
-            response.status(401).json(errorResponse);
-            return;
+            return InvalidTokenResponse.send(response);
         }
         const questionId = Number(request.params.questionId);
         if (isNaN(questionId)) {
-            const errorResponse = ErrorResponse.invalidId(questionId);
-            response.status(400).json(errorResponse);
-            return;
+            return InvalidIdResponse.send(response, questionId);
         }
         const updateQuestion = UpdateQuestion.fromRequest(request);
         if (updateQuestion == null){
-            const errorResponse = ErrorResponse.badParameters();
-            response.status(400).json(errorResponse);
-            return;
+            return BadParametersResponse.send(response);
         }
         const question = await Question.findOne({
             where: {id: questionId},
             relations: {user: true},
         });
         if (question == null) {
-            const errorResponse = ErrorResponse.questionNotFound(questionId);
-            response.status(404).json(errorResponse);
-            return;
+            return QuestionNotFoundResponse.send(response, questionId);
         }
         const userId = token.userId;
         const user = await User.findOneBy({ id: userId });
         if (user == null) {
-            const errorResponse = ErrorResponse.userNotFound(userId);
-            response.status(404).json(errorResponse);
-            return;
+            return UsernameNotFoundResponse.send(response, userId);
         }
         if (token.isAutherizedUser(question.user)) {
-            const errorResponse = ErrorResponse.forbiddenAction();
-            response.status(403).json(errorResponse);
-            return;
+            return ForbiddenActionResponse.send(response);
         }
         if (updateQuestion.body !== undefined){
             question.body = updateQuestion.body;
@@ -124,9 +100,7 @@ export const questionsController = {
         }
         const errors = await validate(question);
         if (errors.length > 0) {
-            const errorResponse = ErrorResponse.fromValidationErrors(errors);
-            response.status(400).json(errorResponse);
-            return;
+            return ValidationErrorResponse.send(response, errors);
         }
         await question.save();
         const publicQuestion = await PublicQuestion.fromQuestion(question);
@@ -141,36 +115,26 @@ export const questionsController = {
     async deleteQuestion(request: Request, response: Response) {
         const token = Token.fromRequest(request);
         if (token == null) {
-            const errorResponse = ErrorResponse.invalidToken();
-            response.status(401).json(errorResponse);
-            return;
+            return InvalidTokenResponse.send(response);
         }
         const questionId = Number(request.params.questionId);
         if (isNaN(questionId)){
-            const errorResponse = ErrorResponse.invalidId(questionId);
-            response.status(400).json(errorResponse);
-            return;
+            return InvalidIdResponse.send(response, questionId);
         }
         const question = await Question.findOne({
             where: {id: questionId},
             relations: {user: true},
         });
         if (question == null){
-            const errorResponse = ErrorResponse.questionNotFound(questionId);
-            response.status(404).json(errorResponse);
-            return;
+            return QuestionNotFoundResponse.send(response, questionId);
         }
         const userId = token.userId;
         const user = await User.findOneBy({id: userId});
         if (user == null) {
-            const errorResponse = ErrorResponse.userNotFound(userId);
-            response.status(404).json(errorResponse);
-            return;
+            return UsernameNotFoundResponse.send(response, userId);
         }
         if (token.isAutherizedUser(question.user)) {
-            const errorResponse = ErrorResponse.forbiddenAction();
-            response.status(403).json(errorResponse);
-            return;
+            return ForbiddenActionResponse.send(response);
         }
         await question.remove();
         console.log(`Question with ID "${questionId}" removed`);
@@ -178,24 +142,19 @@ export const questionsController = {
         const mongoDBUser = await MongoDBUser.findOrCreate(user.id);
         mongoDBUser.questionsDeleted += 1;
         await mongoDBUser.save();
-
         response.status(204).end();
     },
     async getAllAnswersFromQuestion(request: Request, response: Response) {
         const questionId = Number(request.params.questionId);
         if (isNaN(questionId)) {
-            const errorResponse = ErrorResponse.invalidId(questionId);
-            response.status(400).json(errorResponse);
-            return;
+            return InvalidIdResponse.send(response, questionId);
         }
         const question = await Question.findOne({
             where: { id: questionId },
             relations: { answers: { user: true } },
         });
         if (question == null) {
-            const errorResponse = ErrorResponse.questionNotFound(questionId);
-            response.status(404).json(errorResponse);
-            return;
+            return QuestionNotFoundResponse.send(response, questionId);
         }
         const publicAnswerArray: PublicAnswerArray = question.answers.map(PublicAnswer.fromAnswer);
         response.status(200).json(publicAnswerArray);
@@ -203,44 +162,32 @@ export const questionsController = {
     async createAnswer(request: Request, response: Response) {
         const token = Token.fromRequest(request);
         if (token == null) {
-            const errorResponse = ErrorResponse.invalidToken();
-            response.status(401).json(errorResponse);
-            return;
+            return InvalidTokenResponse.send(response);
         }
         const userId = token.userId;
         const user = await User.findOneBy({ id: userId });
         if (user == null) {
-            const errorResponse = ErrorResponse.userNotFound(userId);
-            response.status(404).json(errorResponse);
-            return;
+            return UsernameNotFoundResponse.send(response, userId);
         }
         const questionId = Number(request.params.questionId);
         if (isNaN(questionId)) {
-            const errorResponse = ErrorResponse.invalidId(questionId);
-            response.status(400).json(errorResponse);
-            return;
+            return InvalidIdResponse.send(response, questionId);
         }
         const question = await Question.findOne({
             where: { id: questionId },
             relations: { answers: true, user: true },
         });
         if (question == null) {
-            const errorResponse = ErrorResponse.questionNotFound(questionId);
-            response.status(404).json(errorResponse);
-            return;
+            return QuestionNotFoundResponse.send(response, questionId);
         }
         const createAnswer = CreateAnswer.fromRequest(request);
         if (createAnswer == null) {
-            const errorResponse = ErrorResponse.badParameters();
-            response.status(400).json(errorResponse);
-            return;
+            return BadParametersResponse.send(response);
         }
         const answer = Answer.fromCreateAnswer(createAnswer, user, question);
         const errors = await validate(answer);
         if (errors.length > 0) {
-            const errorResponse = ErrorResponse.fromValidationErrors(errors);
-            response.status(400).json(errorResponse);
-            return;
+            return ValidationErrorResponse.send(response, errors);
         }
         await answer.save();
         const publicAnswer = PublicAnswer.fromAnswer(answer);

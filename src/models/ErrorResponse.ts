@@ -1,55 +1,89 @@
+import { Response } from 'express';
 import { ErrorResponse as ErrorResponseInterface } from '../../../interface/error-response.js';
 import { ValidationError } from 'class-validator';
 
-export class ErrorResponse implements ErrorResponseInterface {
-    error: string;
-    code: number;
+abstract class ErrorResponseBase  {
+    static error: string;
+    static code: number = -1;
 
-    constructor(error: string, code: number) {
-        this.error = error;
-        this.code = code;
+    static send(response: Response, param?: string | number | ValidationError[]){
+        response.status(this.code).json({
+            code: this.code,
+            error: this.error,
+        } satisfies ErrorResponseInterface);
     }
+}
 
-    static fromValidationErrors(errors: ValidationError[], isPasswordValid: boolean = true): ErrorResponse {
-        const messages = errors.map(error => Object.values(error.constraints!)[0]);
-        if (!isPasswordValid) {
-            messages.push("Passwort ist zu kurz");
-        }
-        return new ErrorResponse(messages.join(", "), 400);
-    }
+export class BadParametersResponse extends ErrorResponseBase {
+    static error = "Übermittelte Daten sind nicht vollständig";
+    static code = 400;
+}
 
-    static badParameters(): ErrorResponse {
-        return new ErrorResponse("Übermittelte Daten sind nicht vollständig", 400);
-    }
+export class ForbiddenActionResponse extends ErrorResponseBase {
+    static error = "Aktion nicht erlaubt";
+    static code = 403;
+}
 
-    static forbiddenAction(): ErrorResponse {
-        return new ErrorResponse("Aktion nicht erlaubt", 403);
-    }
+export class InvalidCredentialsResponse extends ErrorResponseBase {
+    static error = "Nutzername oder Passwort falsch!";
+    static code = 401;
+}
 
-    static invalidCredentials(): ErrorResponse {
-        return new ErrorResponse("Nutzername oder Passwort falsch!", 401);
-    }
+export class InvalidTokenResponse extends ErrorResponseBase {
+    static error = "Ungültiges Token";
+    static code = 401;
+}
 
-    static invalidToken(): ErrorResponse {
-        return new ErrorResponse("Ungültiges Token", 401);
-    }
+export class UsernameAlreadyTakenResponse extends ErrorResponseBase {
+    static code = 409;
 
-    static usernameAlreadyTaken(username: string): ErrorResponse {
-        return new ErrorResponse(`Nutzername '${username}' bereits vergeben`, 409);
+    static send(response: Response, username: string){
+        this.error = `Nutzername '${username}' bereits vergeben`;
+        super.send(response);
     }
+}
 
-    static invalidId(id: number): ErrorResponse {
-        return new ErrorResponse(`Ungültige ID '${id}'`, 400);
-    }
+export class InvalidIdResponse extends ErrorResponseBase {
+    static code = 400;
 
-    static userNotFound(id: number): ErrorResponse {
-        return new ErrorResponse(`User mit der ID '${id}' nicht gefunden!`, 404);
+    static send(response: Response, id: string | number) {
+        this.error = `Ungültige ID '${id}'`;
+        super.send(response);
     }
+}
 
-    static questionNotFound(id: number): ErrorResponse{
-        return new ErrorResponse(`Frage mit der ID '${id}' nicht gefunden!`, 404);
+export class UsernameNotFoundResponse extends ErrorResponseBase {
+    static code = 409;
+
+    static send(response: Response, id: number) {
+        this.error = `Benutzer mit der ID '${id}' nicht gefunden!`;
+        super.send(response);
     }
-    static answerNotFound(id: number): ErrorResponse {
-        return new ErrorResponse(`Antwort mit der ID '${id}' nicht gefunden!`, 404);
+}
+
+export class QuestionNotFoundResponse extends ErrorResponseBase {
+    static code = 404;
+
+    static send(response: Response, id: number) {
+        this.error = `Frage mit der ID '${id}' nicht gefunden!`;
+        super.send(response);
+    }
+}
+
+export class AnswerNotFoundResponse extends ErrorResponseBase {
+    static code = 404;
+
+    static send(response: Response, id: number) {
+        this.error = `Antwort mit der ID '${id}' nicht gefunden!`;
+        super.send(response);
+    }
+}
+
+export class ValidationErrorResponse extends ErrorResponseBase {
+    static code = 400;
+
+    static send(response: Response, errors: ValidationError[]) {
+        this.error = errors.map((e) => Object.values(e.constraints!)[0]).join(", ");
+        super.send(response);
     }
 }
