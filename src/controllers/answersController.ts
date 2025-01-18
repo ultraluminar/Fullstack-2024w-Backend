@@ -82,7 +82,7 @@ export const answersController = {
             relations: { user: true },
         });
         if (answer == null){
-            return QuestionNotFoundResponse.send(response, answerId);
+            return AnswerNotFoundResponse.send(response, answerId);
         }
         if (!token.isAutherizedUser(answer.user)){
             return ForbiddenActionResponse.send(response);
