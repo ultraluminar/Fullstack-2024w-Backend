@@ -11,6 +11,7 @@ import {
     InvalidTokenResponse,
     UserNotFoundResponse,
 } from "../models/ErrorResponse.js";
+import { Question } from '../models/question/Question.js';
 
 export const usersController = {
     async getUserById(request: Request, response: Response) {
@@ -52,8 +53,9 @@ export const usersController = {
             return InvalidIdResponse.send(response, userId);
         }
         const user = await User.findOne({
-            where: {id: userId},
-            relations: {questions: { user: true }},
+            where: { id: userId },
+            relations: { questions: { user: true } },
+            order: { questions: { createdAt: "ASC" } },
         });
         if (user == null) {
             return UserNotFoundResponse.send(response, userId);

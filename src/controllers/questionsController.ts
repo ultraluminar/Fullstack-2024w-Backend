@@ -160,6 +160,7 @@ export const questionsController = {
         const question = await Question.findOne({
             where: { id: questionId },
             relations: { answers: { user: true } },
+            order: { answers: { createdAt: "ASC" } },
         });
         if (question == null) {
             return QuestionNotFoundResponse.send(response, questionId);
