@@ -63,7 +63,7 @@ export class Question extends BaseEntity {
         return await Question.find(
             {
                 where: { title: ILike(`%${search}%`) },
-                order: { createdAt: sort === Sort.oldest ? "DESC" : "ASC" },
+                order: { createdAt: sort === Sort.oldest ? "DESC" : "DESC" },
                 skip: offset,
                 take: pageSize,
                 relations: { user: true },

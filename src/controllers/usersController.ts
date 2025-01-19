@@ -55,7 +55,7 @@ export const usersController = {
         const user = await User.findOne({
             where: { id: userId },
             relations: { questions: { user: true } },
-            order: { questions: { createdAt: "ASC" } },
+            order: { questions: { createdAt: "DESC" } },
         });
         if (user == null) {
             return UserNotFoundResponse.send(response, userId);
