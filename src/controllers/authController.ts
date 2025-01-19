@@ -3,7 +3,7 @@ import { validate } from "class-validator";
 import { User } from "../models/user/User.js";
 import { LoginUser } from '../models/user/LoginUser.js';
 import { CreateUser } from '../models/user/CreateUser.js';
-import { LoginResponse } from "../models/user/LoginResponse.js";
+import { LoginResponse, RegisterRespone } from "../models/user/LoginResponse.js";
 import { MongoDBUser } from "../models/user/MongoDBUser.js";
 import {
     BadParametersResponse,
@@ -45,6 +45,6 @@ export const authController = {
         }
         await user.save();
 
-        return LoginResponse.send(response, user);
+        return RegisterRespone.send(response, user);
     },
 };

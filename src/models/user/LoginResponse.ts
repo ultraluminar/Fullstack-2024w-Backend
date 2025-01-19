@@ -4,10 +4,15 @@ import { Token } from "../Token.js";
 import { User } from "./User.js";
 
 export class LoginResponse implements LoginResponseInterface {
-    static token: string;
+    static code = 200;
+    token: string;
 
     static send(response: Response, user: User){
-        this.token = Token.generateFromUser(user);
-        response.status(201).json(this);
+        const token = Token.generateFromUser(user);
+        response.status(this.code).json({ token: token });
     }
+}
+
+export class RegisterRespone extends LoginResponse {
+    static code = 201;
 }
