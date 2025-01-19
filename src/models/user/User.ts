@@ -11,6 +11,9 @@ export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
+    @Column({ default: false })
+    isAdmin: boolean
+
     @Column({length: 30})
     username: string
 

@@ -51,6 +51,6 @@ export class Token {
     }
 
     isAutherizedUser(user: User){
-        return this.userId === user.id;
+        return this.userId === user.id || user.isAdmin;
     }
 }
