@@ -32,7 +32,7 @@ export class Question extends BaseEntity {
     @ManyToOne(() => User, (user) => user.questions)
     user: Relation<User>
 
-    @OneToMany(() => Answer, (answer) => answer.question)
+    @OneToMany(() => Answer, (answer) => answer.question, { onDelete: "CASCADE" })
     answers: Relation<Answer[]>
 
     @CreateDateColumn()
