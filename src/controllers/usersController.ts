@@ -40,7 +40,7 @@ export const usersController = {
         if (user == null) {
             return UserNotFoundResponse.send(response, userId);
         }
-        if (token.isAutherizedUser(user)) {
+        if (!token.isAutherizedUser(user)) {
             return ForbiddenActionResponse.send(response);
         }
         await user.remove();
