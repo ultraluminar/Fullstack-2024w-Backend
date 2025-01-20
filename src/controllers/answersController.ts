@@ -44,7 +44,7 @@ export const answersController = {
         if (answer == null) {
             return AnswerNotFoundResponse.send(response, answerId);
         }
-        if (!token.isAutherizedUser(answer.user)) {
+        if (!await token.isAutherizedUser(answer.user)) {
             return ForbiddenActionResponse.send(response);
         }
         const updateAnswer = UpdateAnswer.fromRequest(request);
@@ -84,7 +84,7 @@ export const answersController = {
         if (answer == null){
             return AnswerNotFoundResponse.send(response, answerId);
         }
-        if (!token.isAutherizedUser(answer.user)){
+        if (!await token.isAutherizedUser(answer.user)){
             return ForbiddenActionResponse.send(response);
         }
         await answer.remove();

@@ -97,7 +97,7 @@ export const questionsController = {
         if (user == null) {
             return UserNotFoundResponse.send(response, userId);
         }
-        if (!token.isAutherizedUser(question.user)) {
+        if (! await token.isAutherizedUser(question.user)) {
             return ForbiddenActionResponse.send(response);
         }
         if (updateQuestion.body !== undefined){
@@ -141,7 +141,7 @@ export const questionsController = {
         if (user == null) {
             return UserNotFoundResponse.send(response, userId);
         }
-        if (!token.isAutherizedUser(question.user)) {
+        if (! await token.isAutherizedUser(question.user)) {
             return ForbiddenActionResponse.send(response);
         }
         await question.remove();

@@ -50,7 +50,14 @@ export class Token {
         }
     }
 
-    isAutherizedUser(user: User){
-        return this.userId === user.id || user.isAdmin;
+    async isAutherizedUser(user: User){
+        if (this.userId == user.id){
+            return true;
+        }
+        const thisUser = await User.findOneBy({ id: this.userId })
+        if (thisUser == null){
+            return false;
+        }
+        return thisUser.isAdmin;
     }
 }
