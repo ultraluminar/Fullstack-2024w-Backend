@@ -7,14 +7,14 @@ export class PublicUser implements PublicUserInterface {
     username: string;
     createdAt: Date;
 
-    constructor(id: number, isAdmin: boolean, username: string, created_at: Date) {
+    constructor(id: number, isAdmin: boolean, username: string, createdAt: Date) {
         this.id = id;
         this.isAdmin = isAdmin
         this.username = username;
-        this.createdAt = created_at;
+        this.createdAt = createdAt;
     }
 
     static fromUser(user: User): PublicUser {
-        return new PublicUser(user.id, user.isAdmin, user.username, user.created_at);
+        return new PublicUser(user.id, user.isAdmin, user.username, user.createdAt);
     }
 }

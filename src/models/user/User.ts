@@ -31,7 +31,7 @@ export class User extends BaseEntity {
     answers: Relation<Answer[]>
 
     @CreateDateColumn()
-    created_at: Date
+    createdAt: Date
 
     static async fromCreateUser(createUser: CreateUser): Promise<User> {
         const user = new User();
