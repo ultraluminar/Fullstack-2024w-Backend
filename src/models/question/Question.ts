@@ -29,7 +29,7 @@ export class Question extends BaseEntity {
     @IsNotEmpty({ message: "Fragebody darf nicht leer sein" })
     body: string
 
-    @ManyToOne(() => User, (user) => user.questions)
+    @ManyToOne(() => User, (user) => user.questions, { onDelete: "CASCADE" })
     user: Relation<User>
 
     @OneToMany(() => Answer, (answer) => answer.question, { onDelete: "CASCADE" })

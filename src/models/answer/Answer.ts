@@ -15,7 +15,7 @@ export class Answer extends BaseEntity {
     @IsNotEmpty({ message: "Antwortbody darf nicht leer sein" })
     body: string
 
-    @ManyToOne(() => User, (user) => user.answers)
+    @ManyToOne(() => User, (user) => user.answers, { onDelete: "CASCADE" })
     user: Relation<User>
 
     @ManyToOne(() => Question, (question) => question.answers, { onDelete: "CASCADE" })

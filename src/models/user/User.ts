@@ -24,10 +24,10 @@ export class User extends BaseEntity {
     @Column("text")
     email: string
 
-    @OneToMany(() => Question, (question) => question.user)
+    @OneToMany(() => Question, (question) => question.user, { onDelete: "CASCADE" })
     questions: Relation<Question[]>
 
-    @OneToMany(() => Answer, (answer) => answer.user)
+    @OneToMany(() => Answer, (answer) => answer.user, { onDelete: "CASCADE" })
     answers: Relation<Answer[]>
 
     @CreateDateColumn()
