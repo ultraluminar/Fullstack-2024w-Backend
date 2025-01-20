@@ -10,8 +10,6 @@ export enum Sort {
     oldest = "oldest",
 }
 
-const pageSize: number = 20;
-
 @Entity()
 export class Question extends BaseEntity {
 
@@ -56,16 +54,11 @@ export class Question extends BaseEntity {
     static async fromQuery(query: ParsedQs): Promise<Question[]>{
         const search = query.search as string || "";
         const sort = query.sort as Sort || Sort.newest;
-        const page = Number(query.page) || 1;
-
-        const offset = (page - 1) * pageSize
 
         return await Question.find(
             {
                 where: { title: ILike(`%${search}%`) },
                 order: { createdAt: sort === Sort.oldest ? "DESC" : "DESC" },
-                skip: offset,
-                take: pageSize,
                 relations: { user: true },
             }
         );
